@@ -1,0 +1,44 @@
+.container{
+    display: flex;
+    flex-wrap: wrap; /* This will wrap the items */
+  }
+ 
+  .product-card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .product-image {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .product-details {
+      text-align: center;
+    }
+    
+    .add-btn {
+      background-color: green;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .minus-btn {
+      background-color: red;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .quantityDiv{
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+    

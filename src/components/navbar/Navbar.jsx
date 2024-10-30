@@ -28,8 +28,9 @@ function Navbar({ count }) {
                 <Link to={"/cart"}>
                     <li className="navbar-item">
                         <div className='countDiv'>
-                            <h3 className="count">{orderCount}</h3>
                             <h3>cart</h3>
+                            <h3 className="count">{orderCount}</h3>
+
                         </div>
 
                     </li>
@@ -37,7 +38,7 @@ function Navbar({ count }) {
                 </Link>
 
                 <li className="navbar-item">
-                    <Link to={"/"}><h3>Profile</h3></Link>
+                    <Link to={"/"}><h3>Home</h3></Link>
 
                 </li>
 

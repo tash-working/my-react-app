@@ -1,0 +1,19 @@
+.category-image{
+    width: 200px;
+    border-radius: 50%;
+}
+.categoryDiv{
+    position: relative;
+}
+.text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the text */
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 1px;
+    background-color: white;
+    border-radius: 10px;
+  }
