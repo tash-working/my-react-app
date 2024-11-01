@@ -9,11 +9,15 @@
       padding: 20px;
       margin: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+    align-items: center;
+
     }
     
     .product-image {
-      width: 200px;
-      height: 200px;
+      width: 100px;
+      height: 100px;
       object-fit: cover;
     }
     
@@ -41,4 +45,12 @@
         padding: 5px 10px;
         border-radius: 5px;
     }
-    
+    .delete-div{
+      display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+    }
+    .delete-div button{
+      background-color: gray;
+      color: white;
+    }

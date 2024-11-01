@@ -17,3 +17,9 @@
     background-color: white;
     border-radius: 10px;
   }
+  .user_div{
+    margin: 5px;
+    background-color: black;
+    color: white;
+    padding: 5px;
+  }
