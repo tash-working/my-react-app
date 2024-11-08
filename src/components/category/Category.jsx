@@ -13,7 +13,7 @@ function Category() {
 
   const getItems = async () => {
     try {
-      // const response = await fetch(`http://localhost:5000/getMenu/${category}`);
+      // const response = await fetch(`server-eight-sepia-51.vercel.app/getMenu/${category}`);
       // const jsonData = await response.json();
       // setMenu(jsonData[0].menu); // Assuming setItems is used for a different purpose
       // console.log(jsonData[0].menu);
