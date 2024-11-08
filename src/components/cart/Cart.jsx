@@ -3,9 +3,9 @@ import Navbar from '../navbar/Navbar';
 import './cart.css';
 import bin from './bin.png';
 import io from "socket.io-client";
-// const socket = io("server-eight-sepia-51.vercel.app");
 // const socket = io("https://server-08ld.onrender.com");
-const socket = io(`server-eight-sepia-51.vercel.app`);
+// const socket = io("https://server-08ld.onrender.com");
+const socket = io(`https://server-08ld.onrender.com`);
 
 function Cart() {
   const [orders, setOrders] = useState([]);
