@@ -12,7 +12,7 @@ function Home() {
 
   const getMenu = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/getMenu`);
+      const response = await fetch(`http://localhost:5000/getMenu`)
       const jsonData = await response.json();
       setMenu(jsonData[0].menu); // Assuming setItems is used for a different purpose
       localStorage.setItem(`menu`, JSON.stringify(jsonData[0].menu));

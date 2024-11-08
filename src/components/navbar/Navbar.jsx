@@ -10,8 +10,13 @@ function Navbar({ count }) {
 
     const getData = () => {
         const orders = JSON.parse(localStorage.getItem(`orders`)) || [];
+        const totalQuantity = orders.reduce((acc, order) => acc + order.quantity, 0);
+        console.log(totalQuantity);
+
+
+        // setCount(totalQuantity);
         setOrders(orders)
-        setOrderCount(orders.length);
+        setOrderCount(totalQuantity);
 
 
     }

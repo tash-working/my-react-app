@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './singleItem.css';
 import Navbar from '../../../navbar/Navbar';
+import _ from 'lodash';
 
 function SingleItem() {
   const { category, singleItem } = useParams();
@@ -14,9 +15,9 @@ function SingleItem() {
   const [selectedSize, setSelectedSize] = useState(''); // Set initial size
   const totalSelectedPrice = ingredients.reduce((acc, item) => (item.selected ? acc + item.price : acc), 0);
 
-  const handleSizeChange = (event) => {
-    setSelectedSize(event.target.value);
-    const filteredItems = size.filter((item) => item.size === event.target.value);
+  const handleSizeChange = (value) => {
+    setSelectedSize(value);
+    const filteredItems = size.filter((item) => item.size === value);
     setPrice(filteredItems[0].price);
   };
 
@@ -33,9 +34,36 @@ function SingleItem() {
       setIngredients(newIngredients);
     }
   };
+  const sample0 = {
+    "name": "pasta",
+    "items": [{ 'name': 'pasta', 'selected': true }, { 'name': 'potato', 'selected': false }]
+  }
+
+
+  const sample1 = [
+    {
+      "name": "pasta",
+      "items": [{ 'name': 'pasta', 'selected': true }, { 'name': 'potato', 'selected': false }],
+      "quantity": 1
+    },
+    {
+      "name": "pasta",
+      "items": [{ 'name': 'pasta', 'selected': true }, { 'name': 'potato', 'selected': true }],
+      "quantity": 1
+    }
+
+  ]
+
+
 
   const getItems = async () => {
     try {
+
+
+
+
+
+
       const menu = JSON.parse(localStorage.getItem('menu'));
       const filteredItems = menu.filter((item) => item.category === category);
       const filteredItem = filteredItems[0].items.filter((item) => item.urlName === singleItem);
@@ -44,6 +72,7 @@ function SingleItem() {
       setIngredients(filteredItem[0].ingredients);
       setSize(filteredItem[0].size);
       setPrice(filteredItem[0].price);
+      setSelectedSize(filteredItem[0].selectedSize);
     } catch (error) {
       console.log(error);
     }
@@ -56,26 +85,78 @@ function SingleItem() {
   const setOrder = () => {
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
     const newItem = item;
+    console.log(selectedSize);
+
+
+
+
 
     if (newItem.price !== price + totalSelectedPrice) {
       newItem.edited = true;
       newItem.price = price + totalSelectedPrice;
-      newItem.addOns = ingredients;
+      newItem.ingredients = ingredients;
       newItem.selectedSize = selectedSize;
 
-      orders.push(newItem);
-      setCount(orders.length);
-      localStorage.setItem('orders', JSON.stringify(orders));
+
+
+      // for (let i = 0; i < orders.length; i++) {
+      //   const element = orders[i];
+
+
+      //   if (_.isEqual(newItem.name, element.name) && _.isEqual(newItem.ingredients, element.ingredients) && _.isEqual(newItem.selectedSize, element.selectedSize)) {
+      //     console.log("match");
+      //     newItem.quantity++
+      //   } else {
+      //     newItem.quantity = 1        }
+      // }
+
+
+      // orders.push(newItem);
+      // setCount(orders.length);
+      // localStorage.setItem('orders', JSON.stringify(orders));
     } else {
       newItem.edited = false;
       newItem.price = price + totalSelectedPrice;
       newItem.addOns = ingredients;
       newItem.selectedSize = selectedSize;
 
-      orders.push(newItem);
-      setCount(orders.length);
-      localStorage.setItem('orders', JSON.stringify(orders));
+
+      // for (let i = 0; i < orders.length; i++) {
+      //   const element = orders[i];
+
+
+      //   if (_.isEqual(newItem.name, element.name) && _.isEqual(newItem.ingredients, element.ingredients) && _.isEqual(newItem.selectedSize, element.selectedSize)) {
+      //     console.log("match");
+      //     newItem.quantity++
+      //   } else {
+      //     newItem.quantity = 1        }
+      // }
+
+      // orders.push(newItem);
+      // setCount(orders.length);
+      // localStorage.setItem('orders', JSON.stringify(orders));
     }
+
+    const index = orders.findIndex(element => 
+      _.isEqual(newItem.name, element.name) && 
+      _.isEqual(newItem.ingredients, element.ingredients) && 
+      _.isEqual(newItem.selectedSize, element.selectedSize));
+    
+    if (index !== -1) {
+      console.log('Object found!');
+      orders[index].quantity += 1
+       // Update existing object
+    } else {
+      console.log('Object not found.');
+      newItem.quantity = 1;
+      orders.push(newItem); // Only push if not found
+    }
+    const totalQuantity = orders.reduce((acc, order) => acc + order.quantity, 0);
+    console.log(totalQuantity);
+    
+
+    setCount(totalQuantity);
+    localStorage.setItem('orders', JSON.stringify(orders));
   };
 
   return (
@@ -85,13 +166,13 @@ function SingleItem() {
       <h2 className="pizza-name">{item.name}</h2>
       <h3>price: {price + totalSelectedPrice}</h3>
 
-      <select className="size-selct" value={selectedSize} onChange={handleSizeChange}>
+      <div className="size-selct" value={selectedSize} >
         {size.map((s, index) => (
-          <option className="size-option" key={index} value={s.size}>
+          <button className="size-option" onClick={() => handleSizeChange(s.size)} key={index} value={s.size}>
             {s.size}
-          </option>
+          </button>
         ))}
-      </select>
+      </div>
 
       <h1>More Addons</h1>
       {ingredients.map((ingredient, index) => (
