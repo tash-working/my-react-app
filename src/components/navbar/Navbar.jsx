@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Navbar.css'; // Import the CSS file
+import './navbar.css'; // Import the CSS file
 import { Link } from 'react-router-dom';
 
 function Navbar({ count }) {
