@@ -173,8 +173,13 @@ function SingleItem() {
           </button>
         ))}
       </div>
+      {ingredients.length ? (
+              <h1>More Addons</h1>
+            ) : (
+              null
+            )}
 
-      <h1>More Addons</h1>
+      
       {ingredients.map((ingredient, index) => (
         <div className="addOnsDiv" key={ingredient.name}>
           <div className="addOnsDiv">
