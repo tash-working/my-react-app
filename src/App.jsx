@@ -9,12 +9,13 @@ import Items from "./components/category/items/Items";
 import SingleItem from "./components/category/items/singleItem/SingleItem";
 import Cart from "./components/cart/Cart";
 import History from "./components/category/history/History";
-
+import { Toaster } from "react-hot-toast";
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <BrowserRouter>
+      <Toaster />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />

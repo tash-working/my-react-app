@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../../../navbar/Navbar";
 import _ from "lodash";
+import toast from "react-hot-toast";
 
 function SingleItem() {
   const { category, singleItem } = useParams();
@@ -154,6 +155,18 @@ function SingleItem() {
     );
     console.log(totalQuantity);
 
+    // Add toast notification
+    toast.success(`${item.name} added to cart!`, {
+      duration: 2000,
+      position: "bottom-right",
+      style: {
+        background: "#4F46E5",
+        color: "#ffffff",
+        padding: "16px",
+      },
+      icon: "🛒",
+    });
+
     setCount(totalQuantity);
     localStorage.setItem("orders", JSON.stringify(orders));
   };
@@ -161,44 +174,51 @@ function SingleItem() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar count={count} />
-      
+
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
+        <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
           {/* Hero Image */}
-          <div className="relative overflow-hidden rounded-2xl bg-gray-100 lg:h-[600px]">
-            <img 
-              src={item.imageUrl} 
+          <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gray-100 lg:aspect-auto lg:h-[600px]">
+            <img
+              src={item.imageUrl}
               alt={item.name}
-              className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" 
+              className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           </div>
-    
+
           {/* Product Info */}
           <div className="mt-8 lg:mt-0">
-            <div className="sticky top-24">
+            <div className="lg:sticky lg:top-24">
               <div className="space-y-8">
                 {/* Title and Price */}
-                <div>
-                  <h1 className="text-4xl font-bold tracking-tight text-gray-900">{item.name}</h1>
-                  <p className="mt-4 text-3xl font-bold text-indigo-600">
-                    ৳{price + totalSelectedPrice}
+                <div className="space-y-2">
+                  <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    {item.name}
+                  </h1>
+                  <p className="flex items-baseline text-3xl font-bold text-indigo-600">
+                    <span className="text-lg">৳</span>
+                    <span>{price + totalSelectedPrice}</span>
                   </p>
                 </div>
-      
-                {/* Size Selector */}
+
+                               {/* Size Selector */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-gray-900">Select Size</h3>
-                  <div className="grid grid-cols-3 gap-3">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Select Size
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                     {size.map((s, index) => (
                       <button
                         key={index}
                         value={s.size}
                         onClick={() => handleSizeChange(s.size)}
-                        className={`rounded-xl px-6 py-3 text-sm font-medium transition-all duration-200
-                          ${selectedSize === s.size 
-                            ? 'bg-indigo-600 text-white ring-2 ring-indigo-600 ring-offset-2' 
-                            : 'bg-white text-gray-700 hover:bg-gray-50 ring-1 ring-gray-200'
+                        className={`w-full rounded-xl px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap overflow-hidden text-ellipsis
+                          ${
+                            selectedSize === s.size
+                              ? "bg-indigo-600 text-white ring-2 ring-indigo-600 ring-offset-2"
+                              : "bg-white text-gray-700 hover:bg-gray-50 ring-1 ring-gray-200"
                           }`}
                       >
                         {s.size}
@@ -206,41 +226,48 @@ function SingleItem() {
                     ))}
                   </div>
                 </div>
-      
+
                 {/* Add-ons Section */}
                 {ingredients.length > 0 && (
                   <div className="space-y-4">
-                    <h3 className="text-lg font-medium text-gray-900">Customize Your Order</h3>
+                    <h3 className="text-lg font-medium text-gray-900">
+                      Customize Your Order
+                    </h3>
                     <div className="space-y-3">
                       {ingredients.map((ingredient, index) => (
-                        <div 
+                        <div
                           key={ingredient.name}
                           className="group flex items-center justify-between rounded-xl border border-gray-200 p-4 transition-all duration-200 hover:border-indigo-600 hover:shadow-md"
                         >
                           <div className="flex items-center gap-4">
-                            <h4 className="font-medium text-gray-900">{ingredient.name}</h4>
+                            <h4 className="font-medium text-gray-900">
+                              {ingredient.name}
+                            </h4>
                             <button
                               onClick={() => addAddOns(ingredient, index)}
                               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200
-                                ${ingredient.selected
-                                  ? 'bg-green-600 text-white shadow-lg shadow-green-600/25'
-                                  : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-700'
+                                ${
+                                  ingredient.selected
+                                    ? "bg-green-600 text-white shadow-lg shadow-green-600/25"
+                                    : "bg-indigo-600 text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-700"
                                 }`}
                             >
-                              {ingredient.selected ? '✓ Added' : '+ Add'}
+                              {ingredient.selected ? "✓ Added" : "+ Add"}
                             </button>
                           </div>
-                          <span className="font-medium text-gray-900">৳{ingredient.price}</span>
+                          <span className="font-medium text-gray-900">
+                            ৳{ingredient.price}
+                          </span>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
-      
+
                 {/* Add to Cart Button */}
                 <button
                   onClick={setOrder}
-                  className="w-full rounded-xl bg-indigo-600 px-8 py-4 text-lg font-semibold text-white shadow-xl transition-all duration-200 hover:bg-indigo-700 hover:shadow-indigo-600/25 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                  className="w-full rounded-xl bg-indigo-600 px-8 py-4 text-lg font-semibold text-white shadow-xl transition-all duration-200 hover:bg-indigo-700 hover:shadow-indigo-600/25 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 active:scale-95"
                 >
                   Add to Cart
                 </button>
