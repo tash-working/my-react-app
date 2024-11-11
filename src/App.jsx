@@ -8,6 +8,7 @@ import Home from './components/home/Home'
 import Items from './components/category/items/Items'
 import SingleItem from './components/category/items/singleItem/SingleItem'
 import Cart from './components/cart/Cart'
+import History from './components/category/history/History'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,6 +18,8 @@ function App() {
     <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/cart" element={<Cart/>} />
+        <Route path="/history" element={<History/>} />
+        
         <Route path="/:category" element={<Category/>} />
         <Route path="/:category/:singleItem" element={<SingleItem/>} />
       
