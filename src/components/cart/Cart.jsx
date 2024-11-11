@@ -123,6 +123,7 @@ function Cart() {
       setCount(totalQuantity);
 
       const sentOrders = JSON.parse(localStorage.getItem(`sentOrders`)) || [];
+      sentOrders = sentOrders.slice().reverse()
       setSentOrders(sentOrders);
     } catch (error) {
       console.log(error);
@@ -133,7 +134,10 @@ function Cart() {
     const handleOrderSent = (data) => {
       try {
         const sentOrders = JSON.parse(localStorage.getItem("sentOrders")) || [];
+
         sentOrders.push(data);
+        sentOrders = sentOrders.slice().reverse()
+
         setSentOrders(sentOrders);
         localStorage.setItem("sentOrders", JSON.stringify(sentOrders));
       } catch (error) {
