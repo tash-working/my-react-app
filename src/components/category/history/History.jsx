@@ -1,126 +1,90 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../../navbar/Navbar';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import Navbar from "../../navbar/Navbar";
+import { Link } from "react-router-dom";
 
 function History() {
-    const [sentOrders, setSentOrders] = useState([]);
+  const [sentOrders, setSentOrders] = useState([]);
 
+  useEffect(() => {
+    const orders = JSON.parse(localStorage.getItem(`sentOrders`)) || [];
+    setSentOrders(orders);
+  }, []); // Add empty dependency array to prevent infinite updates
 
-
-
-
-    useEffect(() => {
-        const sentOrders = JSON.parse(localStorage.getItem(`sentOrders`)) || [];
-        setSentOrders(sentOrders)
-    });
-    return (
-        <div>
-            <Navbar />
-      <nav className="navbar">
-            <ul className="navbar-list">
-                <Link to={"/cart"}>
-                    <li className="navbar-item">
-                        <div className='countDiv'>
-                          <button>Cart</button>
-                         
-
-                        </div>
-
-                    </li>
-
-                </Link>
-
-                <Link to={"/History"}>
-                    <li className="navbar-item">
-                        <div className='countDiv'>
-                          <button>History</button>
-                         
-
-                        </div>
-
-                    </li>
-
-                </Link>
-
-            </ul>
-        </nav>
-        {
-                sentOrders.map((order, index) => (
-                    <div>
-                        {order.status === "complete" ? (
-                            <div key={index} className='order-details'>
-                                <h2>Order No: {order._id}</h2>
-                                <h3>Order From House{order.house}, Road{order.road}, Sector{order.sector}, Uttara</h3>
-                                <h3>Phone: {order.phoneNumber}</h3>
-                                {order.orders.map((order, index) => (
-                                    <div key={index} className="product-card">
-                                        <div className="delete-div">
-
-
-                                            {order.edited ? (
-                                                <h4>Customized</h4>
-                                            ) : (
-                                                <h4>Regular</h4>
-                                            )}
-                                        </div>
-                                        <div className="product-details">
-                                            <h3>{order.name}</h3>
-                                            {order.edited ? (
-                                                <div>
-                                                    {order.selectedSize ? (
-                                                        <h4>{order.selectedSize}</h4>
-                                                    ) : (
-                                                        <h4>{order.size[0].size}</h4>
-                                                    )}
-                                                    {order.ingredients?.length > 0 ? (
-                                                        order.ingredients.map((ingredient) => (
-                                                            <div key={ingredient.id || ingredient.name}>
-                                                                {ingredient.selected ? (
-                                                                    <h6>Added: {ingredient.name}</h6>
-                                                                ) : null}
-                                                            </div>
-                                                        ))
-                                                    ) : null}
-                                                </div>
-                                            ) : (
-                                                <h4>{order.size[0].size}</h4>
-                                            )}
-                                            <p>
-                                                <span className="tk">৳</span>
-                                                {order.price}
-                                            </p>
-                                        </div>
-                                        <div className="add-minus-div">
-
-                                            <h4 className="quantityDiv">{order.quantity}</h4>
-
-                                        </div>
-                                    </div>
-                                ))}
-                                {order.status === "process" ? (
-                                    <h4>Your Order is on Process</h4>
-                                ) : order.status === "granted" ? (
-                                    <h4>Your Order is on the way</h4>
-                                ) : order.status === "complete" ? (
-                                    <h4>Your Order is completed</h4>
-                                )
-                                    : (
-                                        <h4>Regular</h4>
-                                    )
-                                }
-                            </div>
-
-                        )
-                            : (
-                                null
-                            )
-                        }
-                    </div>
-
-                ))
-            }
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
+      
+      {/* Navigation */}
+      <nav className="border-b bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex space-x-8">
+            <Link to="/cart" className="py-4 px-1">
+              <span className="text-sm font-medium text-gray-500 hover:text-gray-700">Cart</span>
+            </Link>
+            <Link to="/History" className="border-b-2 border-indigo-500 py-4 px-1">
+              <span className="text-sm font-medium text-indigo-600">History</span>
+            </Link>
+          </div>
         </div>
-    )
+      </nav>
+
+      {/* Order History */}
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="space-y-6">
+          {sentOrders.map((order, index) => (
+            <div key={index} className="overflow-hidden rounded-lg bg-white shadow-sm">
+              {/* Order Header */}
+              <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-500">Order No:</p>
+                    <p className="text-lg font-medium text-gray-900">{order._id}</p>
+                  </div>
+                  <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                    {order.status}
+                  </span>
+                </div>
+                <div className="mt-2 text-sm text-gray-500">
+                  <p>House {order.house}, Road {order.road}, Sector {order.sector}, Uttara</p>
+                  <p>Phone: {order.phoneNumber}</p>
+                </div>
+              </div>
+
+              {/* Order Items */}
+              <div className="divide-y divide-gray-200">
+                {order.orders.map((item, itemIndex) => (
+                  <div key={itemIndex} className="flex items-center justify-between p-6">
+                    <div className="flex items-center space-x-4">
+                      <div>
+                        <h4 className="text-lg font-medium text-gray-900">{item.name}</h4>
+                        <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                          {item.edited ? 'Customized' : 'Regular'}
+                        </span>
+                        {item.edited && (
+                          <div className="mt-2 space-y-1 text-sm text-gray-500">
+                            <p>Size: {item.selectedSize || item.size[0].size}</p>
+                            {item.ingredients?.map(ingredient => 
+                              ingredient.selected && (
+                                <p key={ingredient.id || ingredient.name}>Added: {ingredient.name}</p>
+                              )
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-medium text-gray-900">৳{item.price}</p>
+                      <p className="mt-1 text-sm text-gray-500">Quantity: {item.quantity}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default History
+export default History;

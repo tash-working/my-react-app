@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import './singleItem.css';
-import Navbar from '../../../navbar/Navbar';
-import _ from 'lodash';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Navbar from "../../../navbar/Navbar";
+import _ from "lodash";
 
 function SingleItem() {
   const { category, singleItem } = useParams();
@@ -12,8 +11,11 @@ function SingleItem() {
   const [size, setSize] = useState([]);
   const [price, setPrice] = useState([]);
 
-  const [selectedSize, setSelectedSize] = useState(''); // Set initial size
-  const totalSelectedPrice = ingredients.reduce((acc, item) => (item.selected ? acc + item.price : acc), 0);
+  const [selectedSize, setSelectedSize] = useState(""); // Set initial size
+  const totalSelectedPrice = ingredients.reduce(
+    (acc, item) => (item.selected ? acc + item.price : acc),
+    0
+  );
 
   const handleSizeChange = (value) => {
     setSelectedSize(value);
@@ -22,7 +24,9 @@ function SingleItem() {
   };
 
   const addAddOns = (increment, index) => {
-    const filteredItems = ingredients.filter((item) => item.name === increment.name);
+    const filteredItems = ingredients.filter(
+      (item) => item.name === increment.name
+    );
     if (filteredItems[0].selected) {
       const newIngredients = [...ingredients];
       newIngredients[index].selected = false;
@@ -35,38 +39,39 @@ function SingleItem() {
     }
   };
   const sample0 = {
-    "name": "pasta",
-    "items": [{ 'name': 'pasta', 'selected': true }, { 'name': 'potato', 'selected': false }]
-  }
-
+    name: "pasta",
+    items: [
+      { name: "pasta", selected: true },
+      { name: "potato", selected: false },
+    ],
+  };
 
   const sample1 = [
     {
-      "name": "pasta",
-      "items": [{ 'name': 'pasta', 'selected': true }, { 'name': 'potato', 'selected': false }],
-      "quantity": 1
+      name: "pasta",
+      items: [
+        { name: "pasta", selected: true },
+        { name: "potato", selected: false },
+      ],
+      quantity: 1,
     },
     {
-      "name": "pasta",
-      "items": [{ 'name': 'pasta', 'selected': true }, { 'name': 'potato', 'selected': true }],
-      "quantity": 1
-    }
-
-  ]
-
-
+      name: "pasta",
+      items: [
+        { name: "pasta", selected: true },
+        { name: "potato", selected: true },
+      ],
+      quantity: 1,
+    },
+  ];
 
   const getItems = async () => {
     try {
-
-
-
-
-
-
-      const menu = JSON.parse(localStorage.getItem('menu'));
+      const menu = JSON.parse(localStorage.getItem("menu"));
       const filteredItems = menu.filter((item) => item.category === category);
-      const filteredItem = filteredItems[0].items.filter((item) => item.urlName === singleItem);
+      const filteredItem = filteredItems[0].items.filter(
+        (item) => item.urlName === singleItem
+      );
 
       setItem(filteredItem[0]);
       setIngredients(filteredItem[0].ingredients);
@@ -83,13 +88,9 @@ function SingleItem() {
   }, [count]);
 
   const setOrder = () => {
-    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
     const newItem = item;
     console.log(selectedSize);
-
-
-
-
 
     if (newItem.price !== price + totalSelectedPrice) {
       newItem.edited = true;
@@ -97,11 +98,8 @@ function SingleItem() {
       newItem.ingredients = ingredients;
       newItem.selectedSize = selectedSize;
 
-
-
       // for (let i = 0; i < orders.length; i++) {
       //   const element = orders[i];
-
 
       //   if (_.isEqual(newItem.name, element.name) && _.isEqual(newItem.ingredients, element.ingredients) && _.isEqual(newItem.selectedSize, element.selectedSize)) {
       //     console.log("match");
@@ -109,7 +107,6 @@ function SingleItem() {
       //   } else {
       //     newItem.quantity = 1        }
       // }
-
 
       // orders.push(newItem);
       // setCount(orders.length);
@@ -120,10 +117,8 @@ function SingleItem() {
       newItem.addOns = ingredients;
       newItem.selectedSize = selectedSize;
 
-
       // for (let i = 0; i < orders.length; i++) {
       //   const element = orders[i];
-
 
       //   if (_.isEqual(newItem.name, element.name) && _.isEqual(newItem.ingredients, element.ingredients) && _.isEqual(newItem.selectedSize, element.selectedSize)) {
       //     console.log("match");
@@ -137,68 +132,122 @@ function SingleItem() {
       // localStorage.setItem('orders', JSON.stringify(orders));
     }
 
-    const index = orders.findIndex(element => 
-      _.isEqual(newItem.name, element.name) && 
-      _.isEqual(newItem.ingredients, element.ingredients) && 
-      _.isEqual(newItem.selectedSize, element.selectedSize));
-    
+    const index = orders.findIndex(
+      (element) =>
+        _.isEqual(newItem.name, element.name) &&
+        _.isEqual(newItem.ingredients, element.ingredients) &&
+        _.isEqual(newItem.selectedSize, element.selectedSize)
+    );
+
     if (index !== -1) {
-      console.log('Object found!');
-      orders[index].quantity += 1
-       // Update existing object
+      console.log("Object found!");
+      orders[index].quantity += 1;
+      // Update existing object
     } else {
-      console.log('Object not found.');
+      console.log("Object not found.");
       newItem.quantity = 1;
       orders.push(newItem); // Only push if not found
     }
-    const totalQuantity = orders.reduce((acc, order) => acc + order.quantity, 0);
+    const totalQuantity = orders.reduce(
+      (acc, order) => acc + order.quantity,
+      0
+    );
     console.log(totalQuantity);
-    
 
     setCount(totalQuantity);
-    localStorage.setItem('orders', JSON.stringify(orders));
+    localStorage.setItem("orders", JSON.stringify(orders));
   };
 
   return (
-    <div className="pizza-item">
+    <div className="min-h-screen bg-gray-50">
       <Navbar count={count} />
-      <img src={item.imageUrl} alt={item.name} className="pizza-image" />
-      <h2 className="pizza-name">{item.name}</h2>
-      <h3>price: {price + totalSelectedPrice}</h3>
-
-      <div className="size-selct" value={selectedSize} >
-        {size.map((s, index) => (
-          <button className="size-option" onClick={() => handleSizeChange(s.size)} key={index} value={s.size}>
-            {s.size}
-          </button>
-        ))}
-      </div>
-      {ingredients.length ? (
-              <h1>More Addons</h1>
-            ) : (
-              null
-            )}
-
       
-      {ingredients.map((ingredient, index) => (
-        <div className="addOnsDiv" key={ingredient.name}>
-          <div className="addOnsDiv">
-            <h3>{ingredient.name}</h3>
-            {ingredient.selected ? (
-              <button onClick={() => addAddOns(ingredient, index)} className="addOnsBtn">
-                selected
-              </button>
-            ) : (
-              <button onClick={() => addAddOns(ingredient, index)} className="addOnsBtn">
-                +add
-              </button>
-            )}
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
+          {/* Hero Image */}
+          <div className="relative overflow-hidden rounded-2xl bg-gray-100 lg:h-[600px]">
+            <img 
+              src={item.imageUrl} 
+              alt={item.name}
+              className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           </div>
-          <h3>{ingredient.price}tk</h3>
+    
+          {/* Product Info */}
+          <div className="mt-8 lg:mt-0">
+            <div className="sticky top-24">
+              <div className="space-y-8">
+                {/* Title and Price */}
+                <div>
+                  <h1 className="text-4xl font-bold tracking-tight text-gray-900">{item.name}</h1>
+                  <p className="mt-4 text-3xl font-bold text-indigo-600">
+                    ৳{price + totalSelectedPrice}
+                  </p>
+                </div>
+      
+                {/* Size Selector */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium text-gray-900">Select Size</h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    {size.map((s, index) => (
+                      <button
+                        key={index}
+                        value={s.size}
+                        onClick={() => handleSizeChange(s.size)}
+                        className={`rounded-xl px-6 py-3 text-sm font-medium transition-all duration-200
+                          ${selectedSize === s.size 
+                            ? 'bg-indigo-600 text-white ring-2 ring-indigo-600 ring-offset-2' 
+                            : 'bg-white text-gray-700 hover:bg-gray-50 ring-1 ring-gray-200'
+                          }`}
+                      >
+                        {s.size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+      
+                {/* Add-ons Section */}
+                {ingredients.length > 0 && (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium text-gray-900">Customize Your Order</h3>
+                    <div className="space-y-3">
+                      {ingredients.map((ingredient, index) => (
+                        <div 
+                          key={ingredient.name}
+                          className="group flex items-center justify-between rounded-xl border border-gray-200 p-4 transition-all duration-200 hover:border-indigo-600 hover:shadow-md"
+                        >
+                          <div className="flex items-center gap-4">
+                            <h4 className="font-medium text-gray-900">{ingredient.name}</h4>
+                            <button
+                              onClick={() => addAddOns(ingredient, index)}
+                              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200
+                                ${ingredient.selected
+                                  ? 'bg-green-600 text-white shadow-lg shadow-green-600/25'
+                                  : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-700'
+                                }`}
+                            >
+                              {ingredient.selected ? '✓ Added' : '+ Add'}
+                            </button>
+                          </div>
+                          <span className="font-medium text-gray-900">৳{ingredient.price}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+      
+                {/* Add to Cart Button */}
+                <button
+                  onClick={setOrder}
+                  className="w-full rounded-xl bg-indigo-600 px-8 py-4 text-lg font-semibold text-white shadow-xl transition-all duration-200 hover:bg-indigo-700 hover:shadow-indigo-600/25 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      ))}
-      <div>
-        <button onClick={setOrder} className="add-to-cart-btn">ADD</button>
       </div>
     </div>
   );
