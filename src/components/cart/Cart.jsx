@@ -122,8 +122,8 @@ function Cart() {
       setOrders(orders);
       setCount(totalQuantity);
 
-      const sentOrders = JSON.parse(localStorage.getItem(`sentOrders`)) || [];
-      sentOrders = sentOrders.slice().reverse()
+      let sentOrders = JSON.parse(localStorage.getItem(`sentOrders`)) || [];
+      // sentOrders = sentOrders.slice().reverse()
       setSentOrders(sentOrders);
     } catch (error) {
       console.log(error);
@@ -133,10 +133,10 @@ function Cart() {
   useEffect(() => {
     const handleOrderSent = (data) => {
       try {
-        const sentOrders = JSON.parse(localStorage.getItem("sentOrders")) || [];
+        let sentOrders = JSON.parse(localStorage.getItem("sentOrders")) || [];
 
         sentOrders.push(data);
-        sentOrders = sentOrders.slice().reverse()
+        // sentOrders = sentOrders.slice().reverse()
 
         setSentOrders(sentOrders);
         localStorage.setItem("sentOrders", JSON.stringify(sentOrders));

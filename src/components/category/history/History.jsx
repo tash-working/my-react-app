@@ -6,8 +6,8 @@ function History() {
   const [sentOrders, setSentOrders] = useState([]);
 
   useEffect(() => {
-    const orders = JSON.parse(localStorage.getItem(`sentOrders`)) || [];
-    orders = orders.slice().reverse()
+    let orders = JSON.parse(localStorage.getItem(`sentOrders`)) || [];
+    // orders = orders.slice().reverse()
 
     setSentOrders(orders);
   }, []); // Add empty dependency array to prevent infinite updates
