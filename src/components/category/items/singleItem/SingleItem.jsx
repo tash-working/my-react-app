@@ -203,7 +203,7 @@ function SingleItem() {
                   </p>
                 </div>
 
-                               {/* Size Selector */}
+                {/* Size Selector */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium text-gray-900">
                     Select Size
