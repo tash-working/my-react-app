@@ -34,7 +34,11 @@ function History() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-6">
           {sentOrders.map((order, index) => (
-            <div key={index} className="overflow-hidden rounded-lg bg-white shadow-sm">
+            <div>
+               {
+                order.status === "complete" ?(
+                  <div>
+                    <div key={index} className="overflow-hidden rounded-lg bg-white shadow-sm">
               {/* Order Header */}
               <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
                 <div className="flex items-center justify-between">
@@ -80,9 +84,18 @@ function History() {
                     </div>
                   </div>
                 ))}
+               
               </div>
             </div>
+                  </div>
+                ):(
+                  null
+                )
+               }
+            </div>
+            
           ))}
+          
         </div>
       </div>
     </div>
