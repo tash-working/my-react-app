@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Items from "./items/Items";
 import Navbar from "../navbar/Navbar";
+import MenuSearch from "../menuSearch/MenuSearch";
 
 function Category() {
   const { category } = useParams();
@@ -39,6 +40,8 @@ function Category() {
 return (
   <div className="min-h-screen bg-gray-50">
     <Navbar count={count} />
+  
+
 
     {/* Hero Section */}
     <div className="bg-white">

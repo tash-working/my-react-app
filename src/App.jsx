@@ -10,6 +10,7 @@ import SingleItem from "./components/category/items/singleItem/SingleItem";
 import Cart from "./components/cart/Cart";
 import History from "./components/category/history/History";
 import { Toaster } from "react-hot-toast";
+import MenuSearch from "./components/menuSearch/MenuSearch";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/history" element={<History />} />
+        <Route path="/search" element={<MenuSearch />} />
 
         <Route path="/:category" element={<Category />} />
         <Route path="/:category/:singleItem" element={<SingleItem />} />

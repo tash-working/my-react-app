@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import MenuSearch from "../menuSearch/MenuSearch";
 
 function Navbar({ count }) {
   const [orders, setOrders] = useState([]);
   const [orderCount, setOrderCount] = useState(0);
+
+
 
   const getData = () => {
     const orders = JSON.parse(localStorage.getItem(`orders`)) || [];
@@ -28,7 +31,7 @@ function Navbar({ count }) {
           {/* Logo/Brand */}
           <Link to="/" className="flex items-center space-x-3">
             <img
-              src="https://images.unsplash.com/photo-1514326640560-7d063ef2aed5"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHevWCw9OwglL5vNOf4UovVnsyRf4pC2dmWg&s"
               alt="Restaurant Logo"
               className="h-10 w-10 rounded-full object-cover transition-transform duration-200 hover:scale-110"
               loading="lazy"
@@ -39,6 +42,9 @@ function Navbar({ count }) {
             />
             <span className="text-xl font-bold text-gray-900">Vetvet Bite</span>
           </Link>
+    
+
+         
 
           {/* Navigation */}
           <div className="flex items-center space-x-8">
