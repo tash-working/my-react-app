@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import Navbar from "../navbar/Navbar";
 import MenuSearch from "../menuSearch/MenuSearch";
+import HomeLanding from "../landing-page/home-landing";
 
 function Home() {
   const [menu, setMenu] = useState([]);
@@ -24,7 +25,8 @@ function Home() {
   }, []); // Ensure useEffect runs only when table_num changes
   return (
     <div className="min-h-screen bg-gray-50"> <Navbar />
-      <MenuSearch></MenuSearch>
+      <MenuSearch/>
+      <HomeLanding/>
       <div className="container mx-auto px-4 py-8">
        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
