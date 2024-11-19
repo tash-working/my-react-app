@@ -264,86 +264,64 @@ function Cart() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-4">
           <div>
+                   
             {orders.map((order, index) => (
-              <div key={index} className="rounded-lg bg-white p-6 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div className="flex space-x-6">
+              <div key={index} className="rounded-lg bg-white p-4 sm:p-6 shadow-sm border m-2">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
+                  {/* Item Info Section */}
+                  <div className="flex gap-4 sm:gap-6">
                     <img
                       src={order.imageUrl}
                       alt={order.name}
-                      className="h-24 w-24 rounded-md object-cover"
+                      className="h-20 w-20 sm:h-24 sm:w-24 rounded-md object-cover flex-shrink-0"
                     />
                     <div className="space-y-2">
-                      <h3 className="text-lg font-medium text-gray-900">
+                      <h3 className="text-base sm:text-lg font-medium text-gray-900 line-clamp-2">
                         {order.name}
                       </h3>
                       <span className="inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
                         {order.edited ? "Customized" : "Regular"}
                       </span>
-                      <p className="text-lg font-medium text-gray-900">
+                      <p className="text-base sm:text-lg font-medium text-gray-900">
                         ৳{order.price * order.quantity}
                       </p>
                     </div>
                   </div>
-
-                  <div className="flex items-center space-x-4">
-                    <button
-                      onClick={() => minus(index)}
-                      className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
-                    >
-                      <span className="sr-only">Decrease quantity</span>
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+            
+                  {/* Actions Section */}
+                  <div className="flex items-center justify-end sm:justify-center gap-4 mt-4 sm:mt-0">
+                    {/* Quantity Controls */}
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => minus(index)}
+                        className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200 transition-colors"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M20 12H4"
-                        />
-                      </svg>
-                    </button>
-                    <span className="text-gray-900">{order.quantity}</span>
-                    <button
-                      onClick={() => add(index)}
-                      className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
-                    >
-                      <span className="sr-only">Increase quantity</span>
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                        <span className="sr-only">Decrease quantity</span>
+                        <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                        </svg>
+                      </button>
+                      <span className="text-gray-900 w-8 text-center">{order.quantity}</span>
+                      <button
+                        onClick={() => add(index)}
+                        className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200 transition-colors"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 6v12m6-6H6"
-                        />
-                      </svg>
-                    </button>
-
+                        <span className="sr-only">Increase quantity</span>
+                        <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
+                        </svg>
+                      </button>
+                    </div>
+            
+                    {/* Delete Button */}
                     <button
                       onClick={() => deleteItem(index)}
-                      className="rounded-full bg-red-50 p-2 text-red-600 hover:bg-red-100"
+                      className="rounded-full bg-red-50 p-2 text-red-600 hover:bg-red-100 transition-colors ml-2"
                     >
                       <span className="sr-only">Remove item</span>
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
+                      <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
                   </div>
