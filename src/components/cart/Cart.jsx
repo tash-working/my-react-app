@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import Confetti from "react-confetti";
-const socket = io(`https://server-08ld.onrender.com`);
+const socket = io(`https://server-08ld.onrender.com/`);
 
 function Cart() {
   const [orders, setOrders] = useState([]);
   const [sentOrders, setSentOrders] = useState([]);
   const [count, setCount] = useState(0);
+  const [netTotal, setNetTotal] = useState(0);
+  const [grossTotal, setGrossTotal] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -29,8 +31,34 @@ function Cart() {
     });
   };
 
+
+  const [dateTime, setDateTime] = useState(null);
+
+  const handleClick = () => {
+    const now = new Date();
+
+    // Get the date components
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Pad with leading zero if needed
+    const day = now.getDate().toString().padStart(2, '0');
+
+    // Get the time components in 24-hour format
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2,
+      '0');
+
+    // Format the date and time string
+    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return formattedDateTime
+  };
+
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    const date_time = handleClick()
     if (formData.phoneNumber.length === 11) {
       const orderData = {
         orders,
@@ -38,9 +66,12 @@ function Cart() {
         sector: formData.sector,
         road: formData.road,
         house: formData.house,
+        price: netTotal,
         status: "process",
+        date_time,
+        orderCompleteTime: "0"
       };
-      
+
       socket.emit("send_order", orderData);
       const updatedOrders = [];
       setOrders(updatedOrders);
@@ -51,7 +82,7 @@ function Cart() {
       );
       setCount(totalQuantity);
       localStorage.setItem("orders", JSON.stringify(updatedOrders));
-      
+
       // Show success toast
       toast.success('Order placed successfully!', {
         duration: 3000,
@@ -119,6 +150,22 @@ function Cart() {
         (acc, order) => acc + order.quantity,
         0
       );
+      function calculateSubtotal(items) {
+        let subtotal = 0;
+
+        // Loop through each item
+        for (const item of items) {
+          // Multiply price by quantity and add to subtotal
+          subtotal += item.price * item.quantity;
+        }
+
+        return subtotal;
+      }
+
+      const subtotal = calculateSubtotal(orders);
+
+      console.log("Subtotal:", subtotal);
+      setNetTotal(subtotal)
       setOrders(orders);
       setCount(totalQuantity);
 
@@ -152,6 +199,7 @@ function Cart() {
           const order = updatedSentOrders[i];
           if (order._id === data.id) {
             order.status = data.status;
+            order.orderCompleteTime = data.orderCompleteTime
             localStorage.setItem(
               "sentOrders",
               JSON.stringify(updatedSentOrders)
@@ -171,7 +219,7 @@ function Cart() {
       socket.off("order_sent", handleOrderSent);
       socket.off("statusGranted", handleStatusGranted);
     };
-  }, []);
+  }, [count]);
 
   const deleteItem = (index) => {
     const updatedOrders = [...orders];
@@ -215,93 +263,108 @@ function Cart() {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-4">
-          {orders.map((order, index) => (
-            <div key={index} className="rounded-lg bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex space-x-6">
-                  <img
-                    src={order.imageUrl}
-                    alt={order.name}
-                    className="h-24 w-24 rounded-md object-cover"
-                  />
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-medium text-gray-900">
-                      {order.name}
-                    </h3>
-                    <span className="inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
-                      {order.edited ? "Customized" : "Regular"}
-                    </span>
-                    <p className="text-lg font-medium text-gray-900">
-                      ৳{order.price}
-                    </p>
+          <div>
+            {orders.map((order, index) => (
+              <div key={index} className="rounded-lg bg-white p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex space-x-6">
+                    <img
+                      src={order.imageUrl}
+                      alt={order.name}
+                      className="h-24 w-24 rounded-md object-cover"
+                    />
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-medium text-gray-900">
+                        {order.name}
+                      </h3>
+                      <span className="inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                        {order.edited ? "Customized" : "Regular"}
+                      </span>
+                      <p className="text-lg font-medium text-gray-900">
+                        ৳{order.price * order.quantity}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={() => minus(index)}
+                      className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+                    >
+                      <span className="sr-only">Decrease quantity</span>
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M20 12H4"
+                        />
+                      </svg>
+                    </button>
+                    <span className="text-gray-900">{order.quantity}</span>
+                    <button
+                      onClick={() => add(index)}
+                      className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+                    >
+                      <span className="sr-only">Increase quantity</span>
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 6v12m6-6H6"
+                        />
+                      </svg>
+                    </button>
+
+                    <button
+                      onClick={() => deleteItem(index)}
+                      className="rounded-full bg-red-50 p-2 text-red-600 hover:bg-red-100"
+                    >
+                      <span className="sr-only">Remove item</span>
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </div>
-
-                <div className="flex items-center space-x-4">
-                  <button
-                    onClick={() => minus(index)}
-                    className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
-                  >
-                    <span className="sr-only">Decrease quantity</span>
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20 12H4"
-                      />
-                    </svg>
-                  </button>
-                  <span className="text-gray-900">{order.quantity}</span>
-                  <button
-                    onClick={() => add(index)}
-                    className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
-                  >
-                    <span className="sr-only">Increase quantity</span>
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6v12m6-6H6"
-                      />
-                    </svg>
-                  </button>
-
-                  <button
-                    onClick={() => deleteItem(index)}
-                    className="rounded-full bg-red-50 p-2 text-red-600 hover:bg-red-100"
-                  >
-                    <span className="sr-only">Remove item</span>
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                </div>
               </div>
-            </div>
-          ))}
+            ))}
+
+          </div>
+          <div className="px-6 py-4 space-y-3">
+            <p>Net Total: {netTotal}৳</p>
+            <hr></hr>
+            <p>Vat - 5.00%: {netTotal * 0.05}৳</p>
+            <p>Auto Round: {Math.round(netTotal * 0.05)}৳</p>
+            <hr></hr>
+            <p>Gross Total: {netTotal + Math.round(netTotal * 0.05)}৳</p>
+          </div>
+
+
         </div>
+
+
 
         {count !== 0 ? (
           <form
@@ -356,68 +419,78 @@ function Cart() {
           </div>
         )}
 
-{sentOrders.map((order, index) => (
-            <div>
-               {
-                order.status !== "complete" ?(
-                  <div>
-                    <div key={index} className="overflow-hidden rounded-lg bg-white shadow-sm">
-              {/* Order Header */}
-              <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-500">Order No:</p>
-                    <p className="text-lg font-medium text-gray-900">{order._id}</p>
-                  </div>
-                  <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
-                    {order.status}
-                  </span>
-                </div>
-                <div className="mt-2 text-sm text-gray-500">
-                  <p>House {order.house}, Road {order.road}, Sector {order.sector}, Uttara</p>
-                  <p>Phone: {order.phoneNumber}</p>
-                </div>
-              </div>
-
-              {/* Order Items */}
-              <div className="divide-y divide-gray-200">
-                {order.orders.map((item, itemIndex) => (
-                  <div key={itemIndex} className="flex items-center justify-between p-6">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <h4 className="text-lg font-medium text-gray-900">{item.name}</h4>
-                        <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
-                          {item.edited ? 'Customized' : 'Regular'}
+        {sentOrders.map((order, index) => (
+          <div>
+            {
+              order.status !== "complete" ? (
+                <div>
+                  <div key={index} className="overflow-hidden rounded-lg bg-white shadow-sm">
+                    {/* Order Header */}
+                    <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-gray-500">Order No:</p>
+                          <p className="text-lg font-medium text-gray-900">{order._id}</p>
+                          <p className="text-lg font-medium text-gray-500">{order.date_time}</p>
+                        </div>
+                        <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                          {order.status}
                         </span>
-                        {item.edited && (
-                          <div className="mt-2 space-y-1 text-sm text-gray-500">
-                            <p>Size: {item.selectedSize || item.size[0].size}</p>
-                            {item.ingredients?.map(ingredient => 
-                              ingredient.selected && (
-                                <p key={ingredient.id || ingredient.name}>Added: {ingredient.name}</p>
-                              )
-                            )}
-                          </div>
-                        )}
+                      </div>
+                      <div className="mt-2 text-sm text-gray-500">
+                        <p>House {order.house}, Road {order.road}, Sector {order.sector}, Uttara</p>
+                        <p>Phone: {order.phoneNumber}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-medium text-gray-900">৳{item.price}</p>
-                      <p className="mt-1 text-sm text-gray-500">Quantity: {item.quantity}</p>
+
+                    {/* Order Items */}
+                    <div className="divide-y divide-gray-200">
+                      {order.orders.map((item, itemIndex) => (
+                        <div key={itemIndex} className="flex items-center justify-between p-6">
+                          <div className="flex items-center space-x-4">
+                            <div>
+                              <h4 className="text-lg font-medium text-gray-900">{item.name}</h4>
+                              <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                                {item.edited ? 'Customized' : 'Regular'}
+                              </span>
+                              {item.edited && (
+                                <div className="mt-2 space-y-1 text-sm text-gray-500">
+                                  <p>Size: {item.selectedSize || item.size[0].size}</p>
+                                  {item.ingredients?.map(ingredient =>
+                                    ingredient.selected && (
+                                      <p key={ingredient.id || ingredient.name}>Added: {ingredient.name}</p>
+                                    )
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-lg font-medium text-gray-900">৳{item.price}</p>
+                            <p className="mt-1 text-sm text-gray-500">Quantity: {item.quantity}</p>
+                          </div>
+                        </div>
+                      ))}
+
+                    </div>
+                    <div className="px-6 py-4 space-y-3">
+
+                      <p>Net Total: {order.price}৳</p>
+                      <hr></hr>
+                      <p>Vat - 5.00%: {order.price * 0.05}৳</p>
+                      <p>Auto Round: {Math.round(order.price * 0.05)}৳</p>
+                      <hr></hr>
+                      <p>Gross Total: {order.price + Math.round(order.price * 0.05)}৳</p>
                     </div>
                   </div>
-                ))}
-               
-              </div>
-            </div>
-                  </div>
-                ):(
-                  null
-                )
-               }
-            </div>
-            
-          ))}
+                </div>
+              ) : (
+                null
+              )
+            }
+          </div>
+
+        ))}
       </div>
     </div>
   );
