@@ -71,6 +71,13 @@ function Cart() {
         date_time,
         orderCompleteTime: "0"
       };
+      localStorage.setItem("user", JSON.stringify({
+        phoneNumber: formData.phoneNumber,
+        sector: formData.sector,
+        road: formData.road,
+        house: formData.house
+      }));
+
 
       socket.emit("send_order", orderData);
       const updatedOrders = [];
@@ -178,6 +185,14 @@ function Cart() {
   };
 
   useEffect(() => {
+    let user = JSON.parse(localStorage.getItem(`user`)) || {
+      phoneNumber: "",
+      sector: "",
+      road: "",
+      house: "",
+    };
+    setFormData(user)
+
     const handleOrderSent = (data) => {
       try {
         let sentOrders = JSON.parse(localStorage.getItem("sentOrders")) || [];
@@ -330,6 +345,15 @@ function Cart() {
             ))}
 
           </div>
+          
+
+
+        </div>
+
+
+
+        {count !== 0 ? (
+          <>
           <div className="px-6 py-4 space-y-3">
             <p>Net Total: {netTotal}৳</p>
             <hr></hr>
@@ -338,14 +362,7 @@ function Cart() {
             <hr></hr>
             <p>Gross Total: {netTotal + Math.round(netTotal * 0.05)}৳</p>
           </div>
-
-
-        </div>
-
-
-
-        {count !== 0 ? (
-          <form
+            <form
             onSubmit={handleSubmit}
             className="mx-auto mt-8 max-w-3xl rounded-xl bg-white p-8 shadow-lg"
           >
@@ -355,6 +372,9 @@ function Cart() {
               </h2>
               <p className="mt-2 text-sm text-gray-600">
                 Please enter your delivery details
+              </p>
+              <p className="mt-2 text-sm text-gray-700">
+                *AUTO FILLED BY PAST ORDER HISTORY
               </p>
             </div>
 
@@ -388,6 +408,7 @@ function Cart() {
               Place Order
             </button>
           </form>
+          </>
         ) : (
           <div className="mt-8 text-center">
             <h3 className="text-lg font-medium text-gray-900">
@@ -414,6 +435,22 @@ function Cart() {
                         <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
                           {order.status}
                         </span>
+                       
+                        {
+                          order.status === "process"?(
+                            <button
+                            type="button"
+                            // onClick={closeModal}
+                            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                          >
+                            Cancel
+                          </button>
+                          )
+                          :(
+                            null
+                          )
+
+                        }
                       </div>
                       <div className="mt-2 text-sm text-gray-500">
                         <p>House {order.house}, Road {order.road}, Sector {order.sector}, Uttara</p>
