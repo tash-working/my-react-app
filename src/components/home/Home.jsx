@@ -26,7 +26,7 @@ function Home() {
     // fetchData2()
   }, []); // Ensure useEffect runs only when table_num changes
   return (
-    <div className="min-h-screen bg-gray-50"> <Navbar />
+    <div className="min-h-screen bg-gray-50 overflow-hidden"> <Navbar />
       <MenuSearch/>
       {/* <HomeLanding/> */}
       {/* <AboutSection/> */}
