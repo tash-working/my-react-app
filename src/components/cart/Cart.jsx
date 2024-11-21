@@ -17,7 +17,7 @@ function Cart() {
   const [count, setCount] = useState(0);
   const [netTotal, setNetTotal] = useState(0);
   const [grossTotal, setGrossTotal] = useState(0);
- 
+
   const [showConfetti, setShowConfetti] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -161,9 +161,8 @@ function Cart() {
         const element = menu[index];
         if (element.category === "Extra") {
           console.log(element);
-          setExtras(element.items)
+          setExtras(element.items);
         }
-
       }
       const totalQuantity = orders.reduce(
         (acc, order) => acc + order.quantity,
@@ -248,10 +247,10 @@ function Cart() {
     };
   }, [count]);
 
-   const getCount = (data) => {
-     console.log(data);
-     setCount(data);
-   };
+  const getCount = (data) => {
+    console.log(data);
+    setCount(data);
+  };
 
   const deleteItem = (index) => {
     const updatedOrders = [...orders];
@@ -294,8 +293,9 @@ function Cart() {
       </nav>
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="space-y-4">
-          <div>
+        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
+          {/* Order Items Section */}
+          <div className="flex-grow space-y-4">
             {orders.map((order, index) => (
               <div
                 key={index}
@@ -385,7 +385,7 @@ function Cart() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4  7h16"
                         />
                       </svg>
                     </button>
@@ -394,191 +394,121 @@ function Cart() {
               </div>
             ))}
           </div>
+
+          {/* Order Summary Section */}
+          
+          {/* 
+          
+          
+          
+          
+          
+          
+          
+          */}
+          {count !== 0 ? 
+              <>
+              <div className="flex-none max-w-md bg-white rounded-lg shadow-lg p-6 space-y-4">
+            <h2 className="text-xl font-semibold text-gray-800 text-center">
+              Order Summary
+            </h2>
+            <div className="flex justify-between items-center">
+              <p className="text-gray-700">Net Total:</p>
+              <p className="font-bold text-lg text-indigo-600">{netTotal}৳</p>
+            </div>
+            <hr className="border-gray-300" />
+            <div className="flex justify-between items-center">
+              <p className="text-gray-700">VAT - 5.00%:</p>
+              <p className="text-gray-600">{(netTotal * 0.05).toFixed(2)}৳</p>
+            </div>
+            <div className="flex justify-between items-center">
+              <p className="text-gray-700">Auto Round:</p>
+              <p className="text-gray-600">{Math.round(netTotal * 0.05)}৳</p>
+            </div>
+            <hr className="border-gray-300" />
+            <div className="flex justify-between items-center font-bold">
+              <p className="text-gray-700">Gross Total:</p>
+              <p className="text-lg text-green-600">
+                {(netTotal + Math.round(netTotal * 0.05)).toFixed(2)}৳
+              </p>
+            </div>
+          </div>
+              
+              </>
+              : null}
         </div>
 
-        {count !== 0 ? (
-          <>
-            <div className="px-6 py-4 space-y-3">
-              <p>Net Total: {netTotal}৳</p>
-              <hr></hr>
-              <p>Vat - 5.00%: {netTotal * 0.05}৳</p>
-              <p>Auto Round: {Math.round(netTotal * 0.05)}৳</p>
-              <hr></hr>
-              <p>Gross Total: {netTotal + Math.round(netTotal * 0.05)}৳</p>
-            </div>
+        {/* Extra Items Section */}
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+          <div className="grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {count !== 0 ? 
+              extras.map((item) => (
+                  <ExtraItems
+                    getCount={getCount}
+                    key={item.urlName}
+                    item={item}
+                    category={item.category}
+                  />
+                ))
+              : null}
+          </div>
+        </div>
 
-            <div className="mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {extras.length > 0
-                  ? extras.map((item) => (
-                      <ExtraItems
-                        getCount={getCount}
-                        key={item.urlName}
-                        item={item}
-                        category={item.category}
-                      />
-                    ))
-                  : null}
-              </div>
-            </div>
-            <form
-              onSubmit={handleSubmit}
-              className="mx-auto mt-8 max-w-3xl rounded-xl bg-white p-8 shadow-lg mb-8"
-            >
-              <div className="mb-8 border-b border-gray-200 pb-4">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Delivery Information
-                </h2>
-                <p className="mt-2 text-sm text-gray-600">
-                  Please enter your delivery details
-                </p>
-                <p className="mt-2 text-sm text-gray-700">
-                  *AUTO FILLED BY PAST ORDER HISTORY
-                </p>
-              </div>
-
-              <div className="grid gap-8 md:grid-cols-2">
-                {["phoneNumber", "sector", "road", "house"].map((field) => (
-                  <div key={field} className="relative">
-                    <label
-                      htmlFor={field}
-                      className="absolute -top-2 left-2 bg-white px-1 text-xs font-medium text-gray-600"
-                    >
-                      {field.charAt(0).toUpperCase() + field.slice(1)}
-                    </label>
-                    <input
-                      type={field === "phoneNumber" ? "tel" : "text"}
-                      id={field}
-                      name={field}
-                      value={formData[field]}
-                      onChange={handleChange}
-                      required
-                      className="block w-full rounded-lg border border-gray-300 bg-white p-4 text-gray-900 shadow-sm transition-all duration-200 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
-                      placeholder={`Enter your ${field.toLowerCase()}`}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <button
-                type="submit"
-                className="mt-8 w-full rounded-lg bg-indigo-600 px-8 py-4 text-base font-semibold text-white shadow-md transition-all duration-200 hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                Place Order
-              </button>
-            </form>
-          </>
-        ) : (
+        {count === 0 ? (
           <div className="mt-8 text-center">
             <h3 className="text-lg font-medium text-gray-900">
               Your cart is empty
             </h3>
             <p className="mt-2 text-gray-500">Add items to get started</p>
           </div>
-        )}
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="mx-auto mt-8 max-w-3xl rounded-xl bg-white p-8 shadow-lg mb-8"
+          >
+            <div className="mb-8 border-b border-gray-200 pb-4">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Delivery Information
+              </h2>
+              <p className="mt-2 text-sm text-gray-600">
+                Please enter your delivery details
+              </p>
+              <p className="mt-2 text-sm text-gray-700">
+                *AUTO FILLED BY PAST ORDER HISTORY
+              </p>
+            </div>
 
-        {sentOrders.map((order, index) => (
-          <div>
-            {order.status !== "complete" ? (
-              <div>
-                <div
-                  key={index}
-                  className="overflow-hidden rounded-lg bg-white shadow-sm"
-                >
-                  {/* Order Header */}
-                  <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-500">Order No:</p>
-                        <p className="text-lg font-medium text-gray-900">
-                          {order._id}
-                        </p>
-                        <p className="text-lg font-medium text-gray-500">
-                          {order.date_time}
-                        </p>
-                      </div>
-                      <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
-                        {order.status}
-                      </span>
-
-                      {order.status === "process" ? (
-                        <button
-                          type="button"
-                          // onClick={closeModal}
-                          className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                        >
-                          Cancel
-                        </button>
-                      ) : null}
-                    </div>
-                    <div className="mt-2 text-sm text-gray-500">
-                      <p>
-                        House {order.house}, Road {order.road}, Sector{" "}
-                        {order.sector}, Uttara
-                      </p>
-                      <p>Phone: {order.phoneNumber}</p>
-                    </div>
-                  </div>
-
-                  {/* Order Items */}
-                  <div className="divide-y divide-gray-200">
-                    {order.orders.map((item, itemIndex) => (
-                      <div
-                        key={itemIndex}
-                        className="flex items-center justify-between p-6"
-                      >
-                        <div className="flex items-center space-x-4">
-                          <div>
-                            <h4 className="text-lg font-medium text-gray-900">
-                              {item.name}
-                            </h4>
-                            <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
-                              {item.edited ? "Customized" : "Regular"}
-                            </span>
-                            {item.edited && (
-                              <div className="mt-2 space-y-1 text-sm text-gray-500">
-                                <p>
-                                  Size: {item.selectedSize || item.size[0].size}
-                                </p>
-                                {item.ingredients?.map(
-                                  (ingredient) =>
-                                    ingredient.selected && (
-                                      <p key={ingredient.id || ingredient.name}>
-                                        Added: {ingredient.name}
-                                      </p>
-                                    )
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-lg font-medium text-gray-900">
-                            ৳{item.price}
-                          </p>
-                          <p className="mt-1 text-sm text-gray-500">
-                            Quantity: {item.quantity}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="px-6 py-4 space-y-3">
-                    <p>Net Total: {order.price}৳</p>
-                    <hr></hr>
-                    <p>Vat - 5.00%: {order.price * 0.05}৳</p>
-                    <p>Auto Round: {Math.round(order.price * 0.05)}৳</p>
-                    <hr></hr>
-                    <p>
-                      Gross Total:{" "}
-                      {order.price + Math.round(order.price * 0.05)}৳
-                    </p>
-                  </div>
+            <div className="grid gap-8 md:grid-cols-2">
+              {["phoneNumber", "sector", "road", "house"].map((field) => (
+                <div key={field} className="relative">
+                  <label
+                    htmlFor={field}
+                    className="absolute -top-2 left-2 bg-white px-1 text-xs font-medium text-gray-600"
+                  >
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
+                  <input
+                    type={field === "phoneNumber" ? "tel" : "text"}
+                    id={field}
+                    name={field}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    required
+                    className="block w-full rounded-lg border border-gray-300 bg-white p-4 text-gray-900 shadow-sm transition-all duration-200 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                    placeholder={`Enter your ${field.toLowerCase()}`}
+                  />
                 </div>
-              </div>
-            ) : null}
-          </div>
-        ))}
+              ))}
+            </div>
+
+            <button
+              type="submit"
+              className="mt-8 w-full rounded-lg bg-indigo-600 px-8 py-4 text-base font-semibold text-white shadow-md transition-all duration- 200 hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Place Order
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
