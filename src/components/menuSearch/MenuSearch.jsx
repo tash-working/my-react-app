@@ -36,7 +36,7 @@ function MenuSearch() {
       setFilteredData([]);
     } else {
       const filtered = data.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
+        item.bio.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredData(filtered);
     }

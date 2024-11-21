@@ -197,6 +197,7 @@ function SingleItem() {
                   <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                     {item.name}
                   </h1>
+                  <p className="">{item.bio}</p>
                   <p className="flex items-baseline text-3xl font-bold text-indigo-600">
                     <span className="text-lg">৳</span>
                     <span>{price + totalSelectedPrice}</span>

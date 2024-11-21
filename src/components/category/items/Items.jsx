@@ -24,20 +24,23 @@ function Items({ getCount, category, item }) {
       orders.push(newItem);
     }
 
-    const totalQuantity = orders.reduce((acc, order) => acc + order.quantity, 0);
+    const totalQuantity = orders.reduce(
+      (acc, order) => acc + order.quantity,
+      0
+    );
     getCount(totalQuantity);
     localStorage.setItem("orders", JSON.stringify(orders));
 
     // Show success toast
     toast.success(`${item.name} added to cart!`, {
       duration: 2000,
-      position: 'bottom-right',
+      position: "bottom-right",
       style: {
-        background: '#4F46E5',
-        color: '#ffffff',
-        padding: '16px',
+        background: "#4F46E5",
+        color: "#ffffff",
+        padding: "16px",
       },
-      icon: '🛒',
+      icon: "🛒",
     });
   };
 
@@ -63,6 +66,8 @@ function Items({ getCount, category, item }) {
           <h3 className="mb-2 line-clamp-1 text-lg font-semibold tracking-tight text-gray-900">
             {item.name}
           </h3>
+          <p className="">{item.bio}</p>
+
           <h4 className="mb-2 line-clamp-1 text-lg font-semibold tracking-tight text-gray-900">
             {item.size[0].size}
           </h4>

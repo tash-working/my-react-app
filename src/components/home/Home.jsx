@@ -5,6 +5,7 @@ import Navbar from "../navbar/Navbar";
 import MenuSearch from "../menuSearch/MenuSearch";
 import HomeLanding from "../landing-page/home-landing";
 import AboutSection from "../landing-page/about(after-landing)";
+import Footer from "../footer/footer";
 
 function Home() {
   const [menu, setMenu] = useState([]);
@@ -63,6 +64,7 @@ function Home() {
           ))}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }
