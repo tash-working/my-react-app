@@ -25,7 +25,7 @@ function Navbar({ count }) {
     // fetchData2()
   }, [count]);
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md">
+    <nav className="bg-gradient-to-r from-fuchsia-700 to-purple-900 text-white sticky top-0 z-50 text-white shadow-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo/Brand */}
@@ -40,7 +40,7 @@ function Navbar({ count }) {
                   "https://images.unsplash.com/photo-1482049016688-2d3e1b311543";
               }}
             />
-            <span className="text-xl font-bold text-gray-900">Vetvet Bite</span>
+            <span className="text-xl font-bold text-white-900">Vetvet Bite</span>
           </Link>
     
 
@@ -50,7 +50,7 @@ function Navbar({ count }) {
           <div className="flex items-center space-x-8">
             <Link
               to="/"
-              className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
+              className="text-sm font-medium text-white-700 hover:text-indigo-600 transition-colors"
             >
               Home
             </Link>
@@ -60,7 +60,7 @@ function Navbar({ count }) {
               <div className="relative">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700 group-hover:text-indigo-600 transition-colors"
+                  className="h-6 w-6 text-white-700 group-hover:text-indigo-600 transition-colors"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -73,12 +73,12 @@ function Navbar({ count }) {
                   />
                 </svg>
                 {orderCount > 0 && (
-                  <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-xs font-medium text-white">
+                  <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-white-600 text-xs font-medium text-white">
                     {orderCount}
                   </span>
                 )}
               </div>
-              <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors">
+              <span className="ml-2 text-sm font-medium text-white-700 group-hover:text-indigo-600 transition-colors">
                 Cart
               </span>
             </Link>

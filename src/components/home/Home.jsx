@@ -54,8 +54,8 @@ function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 border-t border-gray-100">
-                  <p className="text-sm text-gray-600">
+                <div className="p-4 border-t border-gray- bg-gradient-to-r from-fuchsia-700 to-purple-900 ">
+                  <p className="text-sm text-white">
                     Click to view {category.category} menu items
                   </p>
                 </div>
