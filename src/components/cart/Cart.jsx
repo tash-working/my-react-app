@@ -75,6 +75,7 @@ function Cart() {
         date_time,
         orderCompleteTime: "0",
       };
+      
       localStorage.setItem(
         "user",
         JSON.stringify({
