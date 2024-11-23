@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import Confetti from "react-confetti";
 import Items from "../category/items/Items";
 import ExtraItems from "../category/items/ExtraItems";
-const socket = io(`https://server-08ld.onrender.com/`);
+const socket = io(`http://localhost:5000/`);
 
 function Cart() {
   const [orders, setOrders] = useState([]);
@@ -56,6 +56,11 @@ function Cart() {
     return formattedDateTime;
   };
 
+  const cancelReq =(data)=>{
+    console.log(data._id);
+    socket.emit("cancel_order", data);
+    
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     const date_time = handleClick();
@@ -396,7 +401,7 @@ function Cart() {
           </div>
 
           {/* Order Summary Section */}
-          
+
           {/* 
           
           
@@ -406,43 +411,48 @@ function Cart() {
           
           
           */}
-          {count !== 0 ? 
-              <>
+          {count !== 0 ? (
+            <>
               <div className="flex-none max-w-md bg-white rounded-lg shadow-lg p-6 space-y-4">
-            <h2 className="text-xl font-semibold text-gray-800 text-center">
-              Order Summary
-            </h2>
-            <div className="flex justify-between items-center">
-              <p className="text-gray-700">Net Total:</p>
-              <p className="font-bold text-lg text-indigo-600">{netTotal}৳</p>
-            </div>
-            <hr className="border-gray-300" />
-            <div className="flex justify-between items-center">
-              <p className="text-gray-700">VAT - 5.00%:</p>
-              <p className="text-gray-600">{(netTotal * 0.05).toFixed(2)}৳</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <p className="text-gray-700">Auto Round:</p>
-              <p className="text-gray-600">{Math.round(netTotal * 0.05)}৳</p>
-            </div>
-            <hr className="border-gray-300" />
-            <div className="flex justify-between items-center font-bold">
-              <p className="text-gray-700">Gross Total:</p>
-              <p className="text-lg text-green-600">
-                {(netTotal + Math.round(netTotal * 0.05)).toFixed(2)}৳
-              </p>
-            </div>
-          </div>
-              
-              </>
-              : null}
+                <h2 className="text-xl font-semibold text-gray-800 text-center">
+                  Order Summary
+                </h2>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-700">Net Total:</p>
+                  <p className="font-bold text-lg text-indigo-600">
+                    {netTotal}৳
+                  </p>
+                </div>
+                <hr className="border-gray-300" />
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-700">VAT - 5.00%:</p>
+                  <p className="text-gray-600">
+                    {(netTotal * 0.05).toFixed(2)}৳
+                  </p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-700">Auto Round:</p>
+                  <p className="text-gray-600">
+                    {Math.round(netTotal * 0.05)}৳
+                  </p>
+                </div>
+                <hr className="border-gray-300" />
+                <div className="flex justify-between items-center font-bold">
+                  <p className="text-gray-700">Gross Total:</p>
+                  <p className="text-lg text-green-600">
+                    {(netTotal + Math.round(netTotal * 0.05)).toFixed(2)}৳
+                  </p>
+                </div>
+              </div>
+            </>
+          ) : null}
         </div>
 
         {/* Extra Items Section */}
         <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <div className="grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {count !== 0 ? 
-              extras.map((item) => (
+            {count !== 0
+              ? extras.map((item) => (
                   <ExtraItems
                     getCount={getCount}
                     key={item.urlName}
@@ -511,107 +521,106 @@ function Cart() {
         )}
       </div>
       {sentOrders.map((order, index) => (
-          <div>
-            {order.status !== "complete" ? (
-              <div>
-                <div
-                  key={index}
-                  className="overflow-hidden rounded-lg bg-white shadow-sm"
-                >
-                  {/* Order Header */}
-                  <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-500">Order No:</p>
-                        <p className="text-lg font-medium text-gray-900">
-                          {order._id}
-                        </p>
-                        <p className="text-lg font-medium text-gray-500">
-                          {order.date_time}
-                        </p>
-                      </div>
-                      <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
-                        {order.status}
-                      </span>
-
-                      {order.status === "process" ? (
-                        <button
-                          type="button"
-                          // onClick={closeModal}
-                          className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                        >
-                          Cancel
-                        </button>
-                      ) : null}
-                    </div>
-                    <div className="mt-2 text-sm text-gray-500">
-                      <p>
-                        House {order.house}, Road {order.road}, Sector{" "}
-                        {order.sector}, Uttara
+        <div>
+          {order.status !== "complete" && order.status !== "cancel" ?  (
+            <div>
+              <div
+                key={index}
+                className="overflow-hidden rounded-lg bg-white shadow-sm"
+              >
+                {/* Order Header */}
+                <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-500">Order No:</p>
+                      <p className="text-lg font-medium text-gray-900">
+                        {order._id}
                       </p>
-                      <p>Phone: {order.phoneNumber}</p>
+                      <p className="text-lg font-medium text-gray-500">
+                        {order.date_time}
+                      </p>
                     </div>
-                  </div>
+                    <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                      {order.status}
+                    </span>
 
-                  {/* Order Items */}
-                  <div className="divide-y divide-gray-200">
-                    {order.orders.map((item, itemIndex) => (
-                      <div
-                        key={itemIndex}
-                        className="flex items-center justify-between p-6"
+                    {order.status === "process" ? (
+                      <button
+                        type="button"
+                        onClick={()=>cancelReq(order)}
+                        className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                       >
-                        <div className="flex items-center space-x-4">
-                          <div>
-                            <h4 className="text-lg font-medium text-gray-900">
-                              {item.name}
-                            </h4>
-                            <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
-                              {item.edited ? "Customized" : "Regular"}
-                            </span>
-                            {item.edited && (
-                              <div className="mt-2 space-y-1 text-sm text-gray-500">
-                                <p>
-                                  Size: {item.selectedSize || item.size[0].size}
-                                </p>
-                                {item.ingredients?.map(
-                                  (ingredient) =>
-                                    ingredient.selected && (
-                                      <p key={ingredient.id || ingredient.name}>
-                                        Added: {ingredient.name}
-                                      </p>
-                                    )
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-lg font-medium text-gray-900">
-                            ৳{item.price}
-                          </p>
-                          <p className="mt-1 text-sm text-gray-500">
-                            Quantity: {item.quantity}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                        Cancel Request
+                      </button>
+                    ) : null}
                   </div>
-                  <div className="px-6 py-4 space-y-3">
-                    <p>Net Total: {order.price}৳</p>
-                    <hr></hr>
-                    <p>Vat - 5.00%: {order.price * 0.05}৳</p>
-                    <p>Auto Round: {Math.round(order.price * 0.05)}৳</p>
-                    <hr></hr>
+                  <div className="mt-2 text-sm text-gray-500">
                     <p>
-                      Gross Total:{" "}
-                      {order.price + Math.round(order.price * 0.05)}৳
+                      House {order.house}, Road {order.road}, Sector{" "}
+                      {order.sector}, Uttara
                     </p>
+                    <p>Phone: {order.phoneNumber}</p>
                   </div>
                 </div>
+
+                {/* Order Items */}
+                <div className="divide-y divide-gray-200">
+                  {order.orders.map((item, itemIndex) => (
+                    <div
+                      key={itemIndex}
+                      className="flex items-center justify-between p-6"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div>
+                          <h4 className="text-lg font-medium text-gray-900">
+                            {item.name}
+                          </h4>
+                          <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                            {item.edited ? "Customized" : "Regular"}
+                          </span>
+                          {item.edited && (
+                            <div className="mt-2 space-y-1 text-sm text-gray-500">
+                              <p>
+                                Size: {item.selectedSize || item.size[0].size}
+                              </p>
+                              {item.ingredients?.map(
+                                (ingredient) =>
+                                  ingredient.selected && (
+                                    <p key={ingredient.id || ingredient.name}>
+                                      Added: {ingredient.name}
+                                    </p>
+                                  )
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-medium text-gray-900">
+                          ৳{item.price}
+                        </p>
+                        <p className="mt-1 text-sm text-gray-500">
+                          Quantity: {item.quantity}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="px-6 py-4 space-y-3">
+                  <p>Net Total: {order.price}৳</p>
+                  <hr></hr>
+                  <p>Vat - 5.00%: {order.price * 0.05}৳</p>
+                  <p>Auto Round: {Math.round(order.price * 0.05)}৳</p>
+                  <hr></hr>
+                  <p>
+                    Gross Total: {order.price + Math.round(order.price * 0.05)}৳
+                  </p>
+                </div>
               </div>
-            ) : null}
-          </div>
-        ))}
+            </div>
+          ) : null}
+        </div>
+      ))}
     </div>
   );
 }

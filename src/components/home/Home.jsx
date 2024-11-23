@@ -12,7 +12,7 @@ function Home() {
 
   const getMenu = async () => {
     try {
-      const response = await fetch(`https://server-08ld.onrender.com/getMenu`);
+      const response = await fetch(`http://localhost:5000/getMenu`);
       const jsonData = await response.json();
       setMenu(jsonData[0].menu); // Assuming setItems is used for a different purpose
       localStorage.setItem(`menu`, JSON.stringify(jsonData[0].menu));
@@ -26,12 +26,13 @@ function Home() {
     // fetchData2()
   }, []); // Ensure useEffect runs only when table_num changes
   return (
-    <div className="min-h-screen bg-gray-50 overflow-hidden"> <Navbar />
-      <MenuSearch/>
+    <div className="min-h-screen bg-gray-50 overflow-hidden">
+      {" "}
+      <Navbar />
+      <MenuSearch />
       {/* <HomeLanding/> */}
       {/* <AboutSection/> */}
       <div className="container mx-auto px-4 py-8">
-       
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
           {menu.map((category) => (
             <div
@@ -64,7 +65,7 @@ function Home() {
           ))}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

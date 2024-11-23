@@ -34,10 +34,12 @@ function History() {
       {/* Order History */}
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-6">
-          {sentOrders.map((order, index) => (
+          {sentOrders.slice()
+            .reverse()
+            .map((order, index) => (
             <div>
               {
-                order.status === "complete" ? (
+                order.status === "complete" || order.status === "cancel" ?  (
                   <div>
                     <div key={index} className="overflow-hidden rounded-lg bg-white shadow-sm">
                       {/* Order Header */}
