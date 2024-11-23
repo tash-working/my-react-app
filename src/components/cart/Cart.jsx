@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import Confetti from "react-confetti";
 import Items from "../category/items/Items";
 import ExtraItems from "../category/items/ExtraItems";
-const socket = io(`http://localhost:5000/`);
+const socket = io(`https://server-08ld.onrender.com/`);
 
 function Cart() {
   const [orders, setOrders] = useState([]);
@@ -56,11 +56,10 @@ function Cart() {
     return formattedDateTime;
   };
 
-  const cancelReq =(data)=>{
+  const cancelReq = (data) => {
     console.log(data._id);
     socket.emit("cancel_order", data);
-    
-  }
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const date_time = handleClick();
@@ -522,7 +521,7 @@ function Cart() {
       </div>
       {sentOrders.map((order, index) => (
         <div>
-          {order.status !== "complete" && order.status !== "cancel" ?  (
+          {order.status !== "complete" && order.status !== "cancel" ? (
             <div>
               <div
                 key={index}
@@ -547,7 +546,7 @@ function Cart() {
                     {order.status === "process" ? (
                       <button
                         type="button"
-                        onClick={()=>cancelReq(order)}
+                        onClick={() => cancelReq(order)}
                         className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                       >
                         Cancel Request

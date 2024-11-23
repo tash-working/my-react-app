@@ -12,7 +12,7 @@ function Category() {
 
   const getItems = async () => {
     try {
-      // const response = await fetch(`http://localhost:5000/getMenu/${category}`);
+      // const response = await fetch(`https://server-08ld.onrender.com/getMenu/${category}`);
       // const jsonData = await response.json();
       // setMenu(jsonData[0].menu); // Assuming setItems is used for a different purpose
       // console.log(jsonData[0].menu);
