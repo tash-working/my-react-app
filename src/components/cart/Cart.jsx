@@ -57,8 +57,25 @@ function Cart() {
   };
 
   const cancelReq = (data) => {
-    console.log(data._id);
-    socket.emit("cancel_order", data);
+    console.log(data.index);
+    const index = data.index
+
+    socket.emit("cancel_order", data.order);
+
+
+
+    console.log(index);
+    const sentOrders = JSON.parse(localStorage.getItem(`sentOrders`)) || [];
+    const newOrders = [...sentOrders];
+    console.log(newOrders[index]._id);
+    const id = newOrders[index]._id;
+    const selectedOrder = newOrders[index];
+    selectedOrder.req = "cancel";
+    newOrders[index] = selectedOrder;
+    console.log(newOrders);
+    setSentOrders(newOrders);
+
+    localStorage.setItem("sentOrders", JSON.stringify(newOrders));
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -545,13 +562,27 @@ function Cart() {
                     </span>
 
                     {order.status === "process" ? (
-                      <button
+                      <div>
+                        {
+                          order.req === "cancel" ? (
+                            <div
                         type="button"
-                        onClick={() => cancelReq(order)}
+                        className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      >
+                        Cancel Request Sent
+                      </div>
+                          )
+                          :(
+                            <button
+                        type="button"
+                        onClick={() => cancelReq({order, index})}
                         className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                       >
                         Cancel Request
                       </button>
+                          )
+                        }
+                      </div>
                     ) : null}
                   </div>
                   <div className="mt-2 text-sm text-gray-500">
