@@ -546,199 +546,127 @@ function Cart() {
           className="mb-6"
         >
           {order.status !== "complete" && order.status !== "cancel" && (
-            <div className="mx-auto max-w-4xl">
-              <div className="overflow-hidden rounded-xl bg-white shadow-lg border border-gray-100">
+            <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mb-6">
+              <div className="overflow-hidden rounded-2xl bg-white shadow-lg border border-gray-100 transition-all duration-200 hover:shadow-xl">
                 {/* Order Header */}
-                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div className="flex items-center space-x-4">
+                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-4 sm:p-6">
+                  <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-start sm:items-center space-x-4">
                       <div className="flex-shrink-0">
-                        <div className="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center">
-                          <svg
-                            className="h-6 w-6 text-indigo-600"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                            />
+                        <div className="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center transform transition-transform duration-200 hover:scale-110">
+                          <svg className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                           </svg>
                         </div>
                       </div>
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <h3 className="text-lg font-semibold text-gray-900">
-                            Order #{order._id.slice(-6)}
-                          </h3>
+                      
+                      <div className="flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-lg font-bold text-gray-900">Order #{order._id.slice(-6)}</h3>
                           <div className={`
-                            px-3 py-1 rounded-full text-sm font-medium
+                            inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200
                             ${order.status === 'process' ? 'bg-yellow-100 text-yellow-800' : ''}
                             ${order.status === 'preparing' ? 'bg-blue-100 text-blue-800' : ''}
                             ${order.status === 'ready' ? 'bg-green-100 text-green-800' : ''}
                           `}>
-                            <div className="flex items-center space-x-1">
-                              <span className={`
-                                h-2 w-2 rounded-full
-                                ${order.status === 'process' ? 'bg-yellow-400' : ''}
-                                ${order.status === 'preparing' ? 'bg-blue-400' : ''}
-                                ${order.status === 'ready' ? 'bg-green-400' : ''}
-                              `}></span>
-                              <span className="capitalize">{order.status}</span>
-                            </div>
+                            <span className={`
+                              h-2 w-2 rounded-full mr-2
+                              ${order.status === 'process' ? 'bg-yellow-400 animate-pulse' : ''}
+                              ${order.status === 'preparing' ? 'bg-blue-400 animate-pulse' : ''}
+                              ${order.status === 'ready' ? 'bg-green-400 animate-pulse' : ''}
+                            `}></span>
+                            <span className="capitalize">{order.status}</span>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">
-                          <svg
-                            className="h-4 w-4 inline mr-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
+                        
+                        <p className="text-sm text-gray-500 mt-1 flex items-center">
+                          <svg className="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                           </svg>
                           {order.date_time}
                         </p>
                       </div>
                     </div>
-      
+          
                     {order.status === "process" && (
-                      <div className="flex items-center">
+                      <div className="flex justify-end">
                         {order.req === "cancel" ? (
-                          <div className="flex items-center space-x-2 bg-red-50 text-red-600 px-4 py-2 rounded-lg">
-                            <svg
-                              className="h-5 w-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                              />
+                          <div className="inline-flex items-center space-x-2 bg-red-50 text-red-600 px-4 py-2 rounded-lg">
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
-                            <span>Cancel Request Sent</span>
+                            <span className="font-medium">Cancel Request Sent</span>
                           </div>
                         ) : (
                           <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => cancelReq({ order, index })}
-                            className="flex items-center space-x-2 bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2 rounded-lg transition-colors duration-200"
+                            className="inline-flex items-center space-x-2 bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-md"
                           >
-                            <svg
-                              className="h-5 w-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                              />
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
-                            <span>Cancel Order</span>
+                            <span className="font-medium">Cancel Order</span>
                           </motion.button>
                         )}
                       </div>
                     )}
                   </div>
-      
-                  <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-600">
+          
+                  <div className="mt-4 flex flex-col sm:flex-row gap-3 text-sm text-gray-600">
                     <div className="flex items-center">
-                      <svg
-                        className="h-4 w-4 mr-2 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      House {order.house}, Road {order.road}, Sector {order.sector}, Uttara
+                      <div className="p-2 bg-white rounded-lg shadow-sm mr-2">
+                        <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                      </div>
+                      <span className="break-words">House {order.house}, Road {order.road}, Sector {order.sector}, Uttara</span>
                     </div>
+                    
                     <div className="flex items-center">
-                      <svg
-                        className="h-4 w-4 mr-2 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                        />
-                      </svg>
-                      {order.phoneNumber}
+                      <div className="p-2 bg-white rounded-lg shadow-sm mr-2">
+                        <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                      </div>
+                      <span>{order.phoneNumber}</span>
                     </div>
                   </div>
                 </div>
-      
+          
                 {/* Order Items */}
                 <div className="divide-y divide-gray-100">
                   {order.orders.map((item, itemIndex) => (
                     <motion.div
                       key={itemIndex}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: itemIndex * 0.1 }}
-                      className="flex items-center p-6 hover:bg-gray-50 transition-colors duration-200"
+                      className="p-4 sm:p-6 hover:bg-gray-50 transition-colors duration-200"
                     >
-                      <div className="flex-1 flex items-center space-x-4">
-                        <div className="h-16 w-16 flex-shrink-0 rounded-lg bg-gray-100 flex items-center justify-center">
-                          <svg
-                            className="h-8 w-8 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                            />
-                          </svg>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="h-16 w-16 rounded-xl bg-gray-100 flex items-center justify-center">
+                            <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                          </div>
                         </div>
+          
                         <div className="flex-1">
-                          <h4 className="text-lg font-medium text-gray-900">
-                            {item.name}
-                          </h4>
-                          <div className="mt-1 flex items-center space-x-2">
+                          <h4 className="text-lg font-medium text-gray-900">{item.name}</h4>
+                          <div className="mt-1 flex flex-wrap items-center gap-2">
                             <span className={`
                               inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
                               ${item.edited ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-800'}
                             `}>
                               {item.edited ? 'Customized' : 'Regular'}
                             </span>
-                            <span className="text-sm text-gray-500">
-                              Qty: {item.quantity}
-                            </span>
+                            <span className="text-sm text-gray-500">Qty: {item.quantity}</span>
                           </div>
+          
                           {item.edited && (
                             <div className="mt-2 space-y-1">
                               <p className="text-sm text-gray-600">
@@ -747,22 +675,9 @@ function Cart() {
                               {item.ingredients?.map(
                                 (ingredient) =>
                                   ingredient.selected && (
-                                    <p
-                                      key={ingredient.id || ingredient.name}
-                                      className="text-sm text-gray-600 flex items-center"
-                                    >
-                                      <svg
-                                        className="h-3 w-3 mr-1 text-green-500"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth="2"
-                                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                        />
+                                    <p key={ingredient.id || ingredient.name} className="text-sm text-gray-600 flex items-center">
+                                      <svg className="h-3 w-3 mr-1.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                       </svg>
                                       {ingredient.name}
                                     </p>
@@ -771,22 +686,19 @@ function Cart() {
                             </div>
                           )}
                         </div>
+          
                         <div className="text-right">
-                          <p className="text-lg font-medium text-gray-900">
-                            ৳{item.price}
-                          </p>
-                          <p className="mt-1 text-sm text-gray-500">
-                            Total: ৳{item.price * item.quantity}
-                          </p>
+                          <p className="text-lg font-medium text-gray-900">৳{item.price}</p>
+                          <p className="mt-1 text-sm text-gray-500">Total: ৳{item.price * item.quantity}</p>
                         </div>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-      
+          
                 {/* Order Summary */}
-                <div className="bg-gray-50 px-6 py-4">
-                  <div className="space-y-3">
+                <div className="bg-gray-50 p-4 sm:p-6">
+                  <div className="max-w-lg ml-auto space-y-3">
                     <div className="flex justify-between text-sm text-gray-600">
                       <span>Net Total</span>
                       <span>৳{order.price}</span>
