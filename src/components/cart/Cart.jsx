@@ -538,119 +538,279 @@ function Cart() {
         )}
       </div>
       {sentOrders.map((order, index) => (
-        <div>
-          {order.status !== "complete" && order.status !== "cancel" ? (
-            <div>
-              <div
-                key={index}
-                className="overflow-hidden rounded-lg bg-white shadow-sm"
-              >
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
+          className="mb-6"
+        >
+          {order.status !== "complete" && order.status !== "cancel" && (
+            <div className="mx-auto max-w-4xl">
+              <div className="overflow-hidden rounded-xl bg-white shadow-lg border border-gray-100">
                 {/* Order Header */}
-                <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500">Order No:</p>
-                      <p className="text-lg font-medium text-gray-900">
-                        {order._id}
-                      </p>
-                      <p className="text-lg font-medium text-gray-500">
-                        {order.date_time}
-                      </p>
-                    </div>
-                    <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
-                      {order.status}
-                    </span>
-
-                    {order.status === "process" ? (
+                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex-shrink-0">
+                        <div className="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                          <svg
+                            className="h-6 w-6 text-indigo-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
                       <div>
-                        {
-                          order.req === "cancel" ? (
-                            <div
-                        type="button"
-                        className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                      >
-                        Cancel Request Sent
+                        <div className="flex items-center space-x-2">
+                          <h3 className="text-lg font-semibold text-gray-900">
+                            Order #{order._id.slice(-6)}
+                          </h3>
+                          <div className={`
+                            px-3 py-1 rounded-full text-sm font-medium
+                            ${order.status === 'process' ? 'bg-yellow-100 text-yellow-800' : ''}
+                            ${order.status === 'preparing' ? 'bg-blue-100 text-blue-800' : ''}
+                            ${order.status === 'ready' ? 'bg-green-100 text-green-800' : ''}
+                          `}>
+                            <div className="flex items-center space-x-1">
+                              <span className={`
+                                h-2 w-2 rounded-full
+                                ${order.status === 'process' ? 'bg-yellow-400' : ''}
+                                ${order.status === 'preparing' ? 'bg-blue-400' : ''}
+                                ${order.status === 'ready' ? 'bg-green-400' : ''}
+                              `}></span>
+                              <span className="capitalize">{order.status}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-500 mt-1">
+                          <svg
+                            className="h-4 w-4 inline mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          {order.date_time}
+                        </p>
                       </div>
-                          )
-                          :(
-                            <button
-                        type="button"
-                        onClick={() => cancelReq({order, index})}
-                        className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                      >
-                        Cancel Request
-                      </button>
-                          )
-                        }
+                    </div>
+      
+                    {order.status === "process" && (
+                      <div className="flex items-center">
+                        {order.req === "cancel" ? (
+                          <div className="flex items-center space-x-2 bg-red-50 text-red-600 px-4 py-2 rounded-lg">
+                            <svg
+                              className="h-5 w-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                            <span>Cancel Request Sent</span>
+                          </div>
+                        ) : (
+                          <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => cancelReq({ order, index })}
+                            className="flex items-center space-x-2 bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2 rounded-lg transition-colors duration-200"
+                          >
+                            <svg
+                              className="h-5 w-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                            <span>Cancel Order</span>
+                          </motion.button>
+                        )}
                       </div>
-                    ) : null}
+                    )}
                   </div>
-                  <div className="mt-2 text-sm text-gray-500">
-                    <p>
-                      House {order.house}, Road {order.road}, Sector{" "}
-                      {order.sector}, Uttara
-                    </p>
-                    <p>Phone: {order.phoneNumber}</p>
+      
+                  <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-600">
+                    <div className="flex items-center">
+                      <svg
+                        className="h-4 w-4 mr-2 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                      House {order.house}, Road {order.road}, Sector {order.sector}, Uttara
+                    </div>
+                    <div className="flex items-center">
+                      <svg
+                        className="h-4 w-4 mr-2 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                        />
+                      </svg>
+                      {order.phoneNumber}
+                    </div>
                   </div>
                 </div>
-
+      
                 {/* Order Items */}
-                <div className="divide-y divide-gray-200">
+                <div className="divide-y divide-gray-100">
                   {order.orders.map((item, itemIndex) => (
-                    <div
+                    <motion.div
                       key={itemIndex}
-                      className="flex items-center justify-between p-6"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: itemIndex * 0.1 }}
+                      className="flex items-center p-6 hover:bg-gray-50 transition-colors duration-200"
                     >
-                      <div className="flex items-center space-x-4">
-                        <div>
+                      <div className="flex-1 flex items-center space-x-4">
+                        <div className="h-16 w-16 flex-shrink-0 rounded-lg bg-gray-100 flex items-center justify-center">
+                          <svg
+                            className="h-8 w-8 text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
                           <h4 className="text-lg font-medium text-gray-900">
                             {item.name}
                           </h4>
-                          <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
-                            {item.edited ? "Customized" : "Regular"}
-                          </span>
+                          <div className="mt-1 flex items-center space-x-2">
+                            <span className={`
+                              inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
+                              ${item.edited ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-800'}
+                            `}>
+                              {item.edited ? 'Customized' : 'Regular'}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              Qty: {item.quantity}
+                            </span>
+                          </div>
                           {item.edited && (
-                            <div className="mt-2 space-y-1 text-sm text-gray-500">
-                              <p>
+                            <div className="mt-2 space-y-1">
+                              <p className="text-sm text-gray-600">
                                 Size: {item.selectedSize || item.size[0].size}
                               </p>
                               {item.ingredients?.map(
                                 (ingredient) =>
                                   ingredient.selected && (
-                                    <p key={ingredient.id || ingredient.name}>
-                                      Added: {ingredient.name}
+                                    <p
+                                      key={ingredient.id || ingredient.name}
+                                      className="text-sm text-gray-600 flex items-center"
+                                    >
+                                      <svg
+                                        className="h-3 w-3 mr-1 text-green-500"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                        />
+                                      </svg>
+                                      {ingredient.name}
                                     </p>
                                   )
                               )}
                             </div>
                           )}
                         </div>
+                        <div className="text-right">
+                          <p className="text-lg font-medium text-gray-900">
+                            ৳{item.price}
+                          </p>
+                          <p className="mt-1 text-sm text-gray-500">
+                            Total: ৳{item.price * item.quantity}
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-lg font-medium text-gray-900">
-                          ৳{item.price}
-                        </p>
-                        <p className="mt-1 text-sm text-gray-500">
-                          Quantity: {item.quantity}
-                        </p>
-                      </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
-                <div className="px-6 py-4 space-y-3">
-                  <p>Net Total: {order.price}৳</p>
-                  <hr></hr>
-                  <p>Vat - 5.00%: {order.price * 0.05}৳</p>
-                  <p>Auto Round: {Math.round(order.price * 0.05)}৳</p>
-                  <hr></hr>
-                  <p>
-                    Gross Total: {order.price + Math.round(order.price * 0.05)}৳
-                  </p>
+      
+                {/* Order Summary */}
+                <div className="bg-gray-50 px-6 py-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>Net Total</span>
+                      <span>৳{order.price}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>VAT (5%)</span>
+                      <span>৳{(order.price * 0.05).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>Rounded Amount</span>
+                      <span>৳{Math.round(order.price * 0.05)}</span>
+                    </div>
+                    <div className="pt-3 border-t border-gray-200">
+                      <div className="flex justify-between text-lg font-semibold text-gray-900">
+                        <span>Total Amount</span>
+                        <span>৳{order.price + Math.round(order.price * 0.05)}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          ) : null}
-        </div>
+          )}
+        </motion.div>
       ))}
     </div>
   );
