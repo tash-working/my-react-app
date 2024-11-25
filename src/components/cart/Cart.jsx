@@ -922,34 +922,177 @@ function Cart() {
               </button>
 
               {/* Modal content */}
-              <div className="p-8">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-                  <svg
-                    className="h-6 w-6 text-red-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                    />
-                  </svg>
-                </div>
-
-                <div className="mt-4 text-center">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Cancel Order Confirmation
+              <div className="p-6 sm:p-8">
+                {/* Warning Icon and Title */}
+                <div className="mb-6">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+                    <svg
+                      className="h-6 w-6 text-red-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="mt-4 text-lg font-medium text-gray-900 text-center">
+                    Cancel Order #{selectedOrderForCancel?.order._id.slice(-6)}
                   </h3>
-                  <p className="mt-2 text-sm text-gray-500">
-                    Are you sure you want to cancel this order? This action
-                    cannot be undone.
-                  </p>
                 </div>
 
-                <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                {/* Order Details */}
+                <div className="mb-6 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                  {/* Status and Time */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div
+                      className={`
+        inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+        ${
+          selectedOrderForCancel?.order.status === "process"
+            ? "bg-yellow-100 text-yellow-800"
+            : ""
+        }
+      `}
+                    >
+                      <span className="h-2 w-2 rounded-full bg-yellow-400 mr-2"></span>
+                      <span className="capitalize">
+                        {selectedOrderForCancel?.order.status}
+                      </span>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {selectedOrderForCancel?.order.date_time}
+                    </span>
+                  </div>
+
+                  {/* Delivery Details */}
+                  <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">
+                      Delivery Details
+                    </h4>
+                    <div className="space-y-2 text-sm text-gray-600">
+                      <p className="flex items-center">
+                        <svg
+                          className="h-4 w-4 mr-2 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                        </svg>
+                        House {selectedOrderForCancel?.order.house}, Road{" "}
+                        {selectedOrderForCancel?.order.road}, Sector{" "}
+                        {selectedOrderForCancel?.order.sector}
+                      </p>
+                      <p className="flex items-center">
+                        <svg
+                          className="h-4 w-4 mr-2 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                          />
+                        </svg>
+                        {selectedOrderForCancel?.order.phoneNumber}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Order Items */}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium text-gray-700">
+                      Order Items
+                    </h4>
+                    <div className="divide-y divide-gray-100">
+                      {selectedOrderForCancel?.order.orders.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="py-3 flex justify-between items-center"
+                        >
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">
+                              {item.name}
+                            </p>
+                            <div className="flex items-center mt-1">
+                              <span
+                                className={`
+                  inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
+                  ${
+                    item.edited
+                      ? "bg-blue-50 text-blue-700"
+                      : "bg-gray-100 text-gray-800"
+                  }
+                `}
+                              >
+                                {item.edited ? "Customized" : "Regular"}
+                              </span>
+                              <span className="ml-2 text-xs text-gray-500">
+                                Qty: {item.quantity}
+                              </span>
+                            </div>
+                          </div>
+                          <p className="text-sm font-medium text-gray-900 ml-4">
+                            ৳{item.price * item.quantity}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Price Summary */}
+                  <div className="mt-6 border-t border-gray-200 pt-4">
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Net Total</span>
+                        <span className="font-medium">
+                          ৳{selectedOrderForCancel?.order.price}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">VAT (5%)</span>
+                        <span>
+                          ৳
+                          {(selectedOrderForCancel?.order.price * 0.05).toFixed(
+                            2
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm font-medium text-gray-900 pt-2 border-t border-gray-200">
+                        <span>Total Amount</span>
+                        <span>
+                          ৳
+                          {selectedOrderForCancel?.order.price +
+                            Math.round(
+                              selectedOrderForCancel?.order.price * 0.05
+                            )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Warning Message */}
+                <p className="mb-6 text-sm text-red-500 text-center">
+                  Are you sure you want to cancel this order? This action cannot
+                  be undone.
+                </p>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <button
                     onClick={handleCloseModal}
                     className="inline-flex justify-center items-center flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
