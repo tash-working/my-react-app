@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import Navbar from "../navbar/Navbar";
 import MenuSearch from "../menuSearch/MenuSearch";
-import HomeLanding from "../landing-page/home-landing";
+import HomeLanding from "../landing-page/landing2";
 import AboutSection from "../landing-page/about(after-landing)";
 import Footer from "../footer/footer";
 
@@ -29,6 +29,7 @@ function Home() {
     <div className="min-h-screen bg-gray-50 overflow-hidden">
       {" "}
       <Navbar />
+      <HomeLanding/>
       <MenuSearch />
       {/* <HomeLanding/> */}
       {/* <AboutSection/> */}
